@@ -11,7 +11,7 @@ public class DefaultWorldViewer implements WorldViewer {
 
 		Cell cell;
 		if((cell = World.getCellAt(x,y)) != null){
-			sb.append("\nCell: " + cell.getFood() + " organic");
+			sb.append("\n"+cell.getClass().getSimpleName()+": " + cell.getFood() + " organic");
 		}
 		return sb.toString();
 	}

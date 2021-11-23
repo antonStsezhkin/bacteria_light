@@ -1,14 +1,13 @@
 package display.graphics;
 
 import javafx.scene.paint.Color;
-import simulation.world.World;
 
 import java.util.HashMap;
 
 public class Pallet {
 	private HashMap<String, Color[]> colorMap = new HashMap<>();
 
-	public void generateBackgroundColors(String key, Color basicColor, int numberOfSteps){
+	public void generateBrightnessGradient(String key, Color basicColor, int numberOfSteps){
 		Color[] colors = new Color[numberOfSteps];
 		colors[0] = basicColor;
 		double maxBrightness = basicColor.getBrightness();
@@ -28,12 +27,26 @@ public class Pallet {
 		}
 	}
 
-	public void generateCellColorsOpacity(String key, Color basicColor, int numberOfSteps){
+	public void generateOpacityGradient(String key, Color basicColor, int numberOfSteps){
 		Color[] colors = new Color[numberOfSteps];
 		colors[0] = basicColor;
 		double opacityStep = 1d/numberOfSteps;
 		for(int i = 1; i < numberOfSteps; i++){
 			colors[i] = basicColor.deriveColor(0d, 1d, 1d, 1-i*opacityStep);
+		}
+		if(colorMap.containsKey(key)){
+			colorMap.replace(key, colors);
+		}else {
+			colorMap.put(key, colors);
+		}
+	}
+
+	public void generateOpacityWithUnderlayGradient(String key, Color basicColor, Color underlay, int numberOfSteps){
+		Color[] colors = new Color[numberOfSteps];
+		colors[0] = basicColor;
+		double opacityStep = 1d/numberOfSteps;
+		for(int i = 1; i < numberOfSteps; i++){
+			colors[i] = overlayColors(basicColor.deriveColor(0d, 1d, 1d, 1-i*opacityStep), underlay);
 		}
 		if(colorMap.containsKey(key)){
 			colorMap.replace(key, colors);
@@ -66,10 +79,11 @@ public class Pallet {
 	}
 
 	public Color getColor(String key, int value, int max){
-		Color[] cellColors = colorMap.get(key);
-		double step = (double) max/(cellColors.length-1);
+		Color[] colors = colorMap.get(key);
+		double step = (double) max/(colors.length-1);
 		int delta = max - value;
 		int index = (int)Math.floor(delta/step);
-		return cellColors[index];
+		index = index < 0? 0 : index >= colors.length? colors.length-1 : index;
+		return colors[index];
 	}
 }

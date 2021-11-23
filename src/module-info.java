@@ -6,4 +6,5 @@ module bacteria.light {
 
 	opens display;
 	opens display.graphics;
+	opens display.controllers;
 }

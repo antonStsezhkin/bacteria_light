@@ -21,10 +21,6 @@ public class LivingCell extends AbstractCell{
 		this.speciesId = speciesId;
 	}
 
-	public long getSpeciesId() {
-		return speciesId;
-	}
-
 	public void setSpeciesId(long speciesId) {
 		this.speciesId = speciesId;
 	}
@@ -46,7 +42,7 @@ public class LivingCell extends AbstractCell{
 	}
 
 	@Override
-	public long getSpecies() {
+	public long getSpeciesId() {
 		return speciesId;
 	}
 
@@ -61,20 +57,52 @@ public class LivingCell extends AbstractCell{
 	public void live(int x, int y) {
 		GenomeExecutor.executeCurrentGene(this, x,y);
 		if(food == 0){die(x,y);}
-		else if(food == World.MAX_CELL_ORGANIC){
-			currentGeneIndex = 0;
-			for(int i = y-1; i < y+1; y++){
-				for (int j = x-1; j < x+1; j++){
-					if(World.getCellAt(j,i) == null){
-						if(Math.random() > 0.9){
-							Random r = new Random();
-							int index = r.nextInt();
-						}
-						return;
-					}
-				}
-			}
-			die(x,y);
+		else if(food >= World.MAX_CELL_ORGANIC){
+			divide(x,y);
 		}
 	}
+
+	private void divide(int x, int y){
+		currentGeneIndex = 0;
+//TODO optimize free tile search
+		if(World.getCellAt(x,y-1) == null){
+			World.setCellAt(x,y-1, createChildCell());
+			return;
+		}
+		if(World.getCellAt(x+1,y-1) == null){
+			World.setCellAt(x+1,y-1, createChildCell());
+			return;
+		}
+		if(World.getCellAt(x-1,y-1) == null){
+			World.setCellAt(x-1,y-1, createChildCell());
+			return;
+		}
+		if(World.getCellAt(x-1,y) == null){
+			World.setCellAt(x-1,y, createChildCell());
+			return;
+		}
+		if(World.getCellAt(x+1,y) == null){
+			World.setCellAt(x+1,y, createChildCell());
+			return;
+		}
+		if(World.getCellAt(x,y+1) == null){
+			World.setCellAt(x,y+1, createChildCell());
+			return;
+		}
+		if(World.getCellAt(x+1,y+1) == null){
+			World.setCellAt(x+1,y+1, createChildCell());
+			return;
+		}
+		if(World.getCellAt(x-1,y+1) == null){
+			World.setCellAt(x-1,y+1, createChildCell());
+			return;
+		}
+		die(x,y);
+	}
+
+	private LivingCell createChildCell(){
+		food = food/2;
+		return new LivingCell(speciesId, food);
+	}
+
 }

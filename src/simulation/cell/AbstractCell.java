@@ -1,7 +1,5 @@
 package simulation.cell;
 
-import simulation.cell.Cell;
-
 public abstract class AbstractCell implements Cell {
 	protected int food;
 	protected boolean tired = false;
@@ -24,7 +22,18 @@ public abstract class AbstractCell implements Cell {
 	}
 
 	@Override
-	public void setFood(int food) {
+	public void setFood(int food){
 		this.food = food;
+	}
+
+	@Override
+	public void increaseFood(int food) {
+		this.food += food;
+	}
+
+	@Override
+	public void decreaseFood(int food) {
+		this.food -= food;
+		this.food = this.food < 0? 0 : this.food;
 	}
 }

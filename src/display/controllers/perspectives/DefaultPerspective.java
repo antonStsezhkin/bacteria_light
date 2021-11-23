@@ -9,20 +9,22 @@ import display.graphics.Tile;
 import javafx.event.EventHandler;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
+import simulation.cell.Cell;
+import simulation.cell.DeadCell;
+import simulation.cell.LivingCell;
 import simulation.world.World;
 
 public class DefaultPerspective implements Perspective, Painter{
 	private Pallet palette;
 	private static final String BG_KEY = "light";
-	private static final String CEll_KEY = "cell";
-
 
 	@Override
 	public void init(View view) {
 		palette = new Pallet();
-		palette.generateBackgroundColors(BG_KEY, Color.web("#ffcc33"), view.getTiles().length *2);
+		palette.generateBrightnessGradient(BG_KEY, Color.web("#ffcc33"), view.getTiles().length *2);
 
-		palette.generateCellColorsOpacity(CEll_KEY, Color.GREEN, 150);
+		palette.generateOpacityGradient(LivingCell.class.getSimpleName(), Color.GREEN, 200);
+		palette.generateOpacityWithUnderlayGradient(DeadCell.class.getSimpleName(), Color.web("#555555"), Color.WHITE, 200);
 
 		WorldViewer viewer = new DefaultWorldViewer();
 		EventHandler<MouseEvent> onMove = new PopupLegendEvent(view, viewer,false);
@@ -42,9 +44,10 @@ public class DefaultPerspective implements Perspective, Painter{
 		for (int y = 0; y < tiles.length; y++){
 			for(int x = 0; x < tiles[0].length; x++){
 				Color color = palette.getColor(BG_KEY, World.getLight(x,y), max);
-				if(World.getCellAt(x,y) != null){
-					Color cellColor = palette.getColor(CEll_KEY, World.getCellAt(x,y).getFood(),1500);
-					color = palette.overlayColors(cellColor, color);
+				Cell cell = World.getCellAt(x,y);
+				if(cell != null){
+						Color cellColor = palette.getColor(cell.getClass().getSimpleName(), cell.getFood(), 1500);
+						color = palette.overlayColors(cellColor, color);
 				}
 				tiles[y][x].setColor(color);
 				tiles[y][x].setStroke(Color.BLACK);

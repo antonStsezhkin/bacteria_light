@@ -6,13 +6,11 @@ import simulation.cell.LivingCell;
 import simulation.cell.Wall;
 import simulation.genome.Species;
 
-import java.util.Random;
-
 public class World {
 	private static int width = 100, height = 66;
 	private static Cell[][] cellArray = new Cell[height][width];
 	private static int maxLight = 1000;
-	private static double waterTransperacy = 0.995;
+	private static final double waterTransparency = 0.995;
 	private static double cellOpacity = 0.2;
 	private static int[][] light = new int[height][width];
 	public static final int MAX_CELL_ORGANIC = 1500;
@@ -54,44 +52,68 @@ public class World {
 		for (int x = 0; x < width; x++){
 			double l = maxLight;
 			for (int y = 0; y < height; y++){
-				l *= waterTransperacy;
-				if(cellArray[y][x] != null){
-					Cell cell = cellArray[y][x];
-					double foodQ = cell.getFood()/1000d;
-					double opacity = cellOpacity * foodQ;
-					double t = 1-opacity;
-					l *= t;
+				l *= waterTransparency;
+				Cell cell = cellArray[y][x];
+				if(cell != null){
+					l *= calculateCellOpacity(cell);
 				}
 				light[y][x] = (int)l;
 			}
 		}
 	}
 
+	private static double calculateCellOpacity(Cell cell){
+		double foodQ = cell.getFood()/10000d;
+		double opacity = cellOpacity * foodQ;
+		return 1-opacity;
+	}
+
+	public static void calculateLight(int x, int y){
+		double l = y==0? maxLight : getLight(x,y-1);
+		int prevLight = getLight(x,y);
+		for(int i=y; i<height; i++){
+			l *= waterTransparency;
+			Cell cell = cellArray[y][x];
+			if(cell != null){
+				l *= calculateCellOpacity(cell);
+			}
+			int intL = (int)l;
+			//no need to calculate down the line if nothing changed
+			if(i==0 && intL == prevLight) break;
+			light[i][x] = intL;
+		}
+	}
+
 	public static Cell getCellAt(int x, int y){
-		boolean yIsOK = y > 0 && y < height;
+		boolean yIsOK = y > -1 && y < height;
 		if(!yIsOK) return Wall.INSTANCE;
+		x = x < 0? width - 1 : x;
 		x %= width;
 		return cellArray[y][x];
 	}
 
 	public static void setCellAt(int x, int y, Cell cell){
-		boolean yIsOK = y > 0 && y < height;
+		boolean yIsOK = y > -1 && y < height;
 		if(yIsOK) {
+			x = x < 0? width - 1 : x;
 			x %= width;
 			cellArray[y][x] = cell;
 		}
 	}
 
 	public static boolean canMoveTo(int x, int y) {
-		boolean yIsOK = y > 0 && y < height;
+		boolean yIsOK = y > -1 && y < height;
+		x = x < 0? width - 1 : x;
 		x %= width;
 		return yIsOK && cellArray[y][x] == null;
 	}
 
-	public static void move(Cell cell, int xTo, int yTo) {
+	public static void move(int xFrom, int yFrom, int xTo, int yTo) {
+		xTo = xTo < 0? width - 1 : xTo;
+		xTo %= width;
 		if(canMoveTo(xTo, yTo)){
-			xTo %= width;
-			cellArray[yTo][xTo] = cell;
+			cellArray[yTo][xTo] = cellArray[yFrom][xFrom];
+			cellArray[yFrom][xFrom] = null;
 		}
 	}
 }

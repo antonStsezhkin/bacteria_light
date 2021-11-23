@@ -1,4 +1,4 @@
-package display.controllers;
+package display.graphics;
 
 import javafx.scene.layout.Region;
 

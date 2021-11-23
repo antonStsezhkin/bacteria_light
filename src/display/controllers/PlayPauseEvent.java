@@ -1,9 +1,7 @@
 package display.controllers;
 
 import display.View;
-import javafx.animation.AnimationTimer;
-import javafx.event.EventHandler;
-import javafx.scene.Node;
+ import javafx.event.EventHandler;
 import javafx.scene.input.MouseEvent;
 
 public class PlayPauseEvent implements EventHandler<MouseEvent> {
@@ -18,12 +16,10 @@ public class PlayPauseEvent implements EventHandler<MouseEvent> {
 	public void handle(MouseEvent mouseEvent) {
 		if (!isRunning) {
 			view.getTimer().start();
-			//mouseEvent.
-			//playPause.setText("pause");
 		} else {
 			view.getTimer().stop();
-			//playPause.setText("play");
 		}
 		isRunning = !isRunning;
+		view.refreshUI();
 	}
 }

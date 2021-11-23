@@ -3,10 +3,11 @@ package simulation.cell;
 import simulation.world.World;
 
 public class DeadCell extends AbstractCell{
+	private boolean tired = false;
 	public DeadCell(int food) {super(food);}
 
 	@Override
-	public long getSpecies() {
+	public long getSpeciesId() {
 		return -1;
 	}
 
@@ -17,9 +18,7 @@ public class DeadCell extends AbstractCell{
 
 	@Override
 	public void live(int x, int y) {
-		if(tired) {tired = false; return;}
-		if(World.canMoveTo(x, y+1)){
-			World.move(this, x, y+1);
-		}
+		if(!tired){World.move(x,y, x, y+1);}
+		tired = !tired;
 	}
 }

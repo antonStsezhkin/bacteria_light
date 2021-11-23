@@ -1,5 +1,6 @@
 package display;
 
+import display.controllers.Controller;
 import display.controllers.PlayPauseEvent;
 import display.controllers.PopupLegendEvent;
 import display.controllers.perspectives.DefaultPerspective;
@@ -26,6 +27,7 @@ public class View {
 	private Pane controls = new VBox(5);
 	Perspective perspective;
 	private AnimationTimer timer;
+	private Controller controller = new Controller();
 
 
 	public View(int tilesX, int tilesY) {
@@ -81,7 +83,7 @@ public class View {
 			@Override
 			public void handle(long now) {
 				try {
-					Simulation.turn();
+					controller.update();
 				} catch (Exception e) {
 					e.printStackTrace();
 				}

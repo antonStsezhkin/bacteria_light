@@ -2,7 +2,6 @@ package simulation.genome;
 
 import simulation.SpeciesStorage;
 import simulation.cell.LivingCell;
-import simulation.genome.genes.RedirectGene;
 
 public class GenomeExecutor {
 	private static final int STOPPER = 10;

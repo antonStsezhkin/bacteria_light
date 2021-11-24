@@ -49,7 +49,7 @@ public class LivingCell extends AbstractCell{
 	@Override
 	public void die(int x, int y) {
 		Cell corpse = food > 0? new DeadCell(food) : null;
-		//SpeciesStorage.INSTANCE.decrease(speciesId);
+		SpeciesStorage.INSTANCE.decrease(speciesId);
 		World.setCellAt(x,y,corpse);
 	}
 

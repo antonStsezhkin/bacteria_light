@@ -20,6 +20,6 @@ public class PlayPauseEvent implements EventHandler<MouseEvent> {
 			view.getTimer().stop();
 		}
 		isRunning = !isRunning;
-		view.refreshUI();
+		//view.refreshUI();
 	}
 }

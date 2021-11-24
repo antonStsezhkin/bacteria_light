@@ -23,7 +23,7 @@ public abstract class AbstractCell implements Cell {
 
 	@Override
 	public void setFood(int food){
-		this.food = food;
+		this.food = Math.max(food,0);
 	}
 
 	@Override
@@ -34,6 +34,6 @@ public abstract class AbstractCell implements Cell {
 	@Override
 	public void decreaseFood(int food) {
 		this.food -= food;
-		this.food = this.food < 0? 0 : this.food;
+		this.food = Math.max(this.food, 0);
 	}
 }

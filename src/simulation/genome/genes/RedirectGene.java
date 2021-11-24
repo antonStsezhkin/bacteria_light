@@ -1,12 +1,18 @@
 package simulation.genome.genes;
 
 import simulation.cell.LivingCell;
-import simulation.genome.Gene;
+import simulation.genome.genes.abstract_genes.AbstractGene;
 
-public class RedirectGene implements Gene {
+public class RedirectGene extends AbstractGene {
+
 	@Override
-	public int execute(LivingCell cell, byte[] genome, int x, int y) {
+	protected int executeGene(LivingCell cell, byte[] genome, int x, int y) {
 		int target = genome[cell.getCurrentGeneIndex()] + cell.getCurrentGeneIndex();
 		return target % genome.length;
+	}
+
+	@Override
+	protected int getCost(LivingCell cell, int x, int y) {
+		return 1;
 	}
 }

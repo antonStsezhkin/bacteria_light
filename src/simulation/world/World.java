@@ -2,12 +2,13 @@ package simulation.world;
 
 import simulation.SpeciesStorage;
 import simulation.cell.Cell;
+import simulation.cell.DeadCell;
 import simulation.cell.LivingCell;
 import simulation.cell.Wall;
 import simulation.genome.Species;
 
 public class World {
-	private static int width = 100, height = 66;
+	private static int width = 150, height = 80;
 	private static Cell[][] cellArray = new Cell[height][width];
 	private static int maxLight = 1000;
 	private static final double waterTransparency = 0.995;
@@ -40,11 +41,13 @@ public class World {
 		for(int i = 0; i < 64; i++){
 			firstGenome[i] = 32;
 		}
+		firstGenome[5]=5;
 		Species greenCell = new Species(1, firstGenome);
 		SpeciesStorage.INSTANCE.put(greenCell);
 		int x = width/2;
 		int y = height/2;
 		setCellAt(x,y, new LivingCell(greenCell, MAX_CELL_ORGANIC/2));
+		//setCellAt(x,y, new DeadCell(MAX_CELL_ORGANIC));
 		calculateLight();
 	}
 
@@ -52,32 +55,34 @@ public class World {
 		for (int x = 0; x < width; x++){
 			double l = maxLight;
 			for (int y = 0; y < height; y++){
-				l *= waterTransparency;
-				Cell cell = cellArray[y][x];
-				if(cell != null){
-					l *= calculateCellOpacity(cell);
-				}
-				light[y][x] = (int)l;
+				l = calculateLightInCell(x,y,l);
+				light[y][x] = (int)Math.round(l);
 			}
 		}
 	}
 
 	private static double calculateCellOpacity(Cell cell){
-		double foodQ = cell.getFood()/10000d;
-		double opacity = cellOpacity * foodQ;
-		return 1-opacity;
+		double foodQ = cell.getFood()/4500d;
+		double op = foodQ*cellOpacity;
+		return op;
+	}
+
+	private static double calculateLightInCell(int x, int y, double sourceLight){
+		double t = waterTransparency;
+		Cell cell = cellArray[y][x];
+		if(cell != null){
+			t -= calculateCellOpacity(cell);
+		}
+		sourceLight*=t;
+		return sourceLight;
 	}
 
 	public static void calculateLight(int x, int y){
 		double l = y==0? maxLight : getLight(x,y-1);
 		int prevLight = getLight(x,y);
 		for(int i=y; i<height; i++){
-			l *= waterTransparency;
-			Cell cell = cellArray[y][x];
-			if(cell != null){
-				l *= calculateCellOpacity(cell);
-			}
-			int intL = (int)l;
+			l = calculateLightInCell(x,i,l);
+			int intL = (int)Math.round(l);
 			//no need to calculate down the line if nothing changed
 			if(i==0 && intL == prevLight) break;
 			light[i][x] = intL;

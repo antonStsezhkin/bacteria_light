@@ -10,8 +10,8 @@ import simulation.world.World;
 
 public class Main extends Application {
 	private static final String APP_NAME = "Bacteria evolution simulator";
-	private static int WIDTH = 1600;
-	private static int HEIGHT = 990;
+	private static int WIDTH = 1750;
+	private static int HEIGHT = 900;
 	private static int MENU_WIDTH = 100;
 
 

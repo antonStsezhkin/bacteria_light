@@ -49,14 +49,16 @@ public class LivingCell extends AbstractCell{
 	@Override
 	public void die(int x, int y) {
 		Cell corpse = food > 0? new DeadCell(food) : null;
-		SpeciesStorage.INSTANCE.decrease(speciesId);
+		//SpeciesStorage.INSTANCE.decrease(speciesId);
 		World.setCellAt(x,y,corpse);
 	}
 
 	@Override
 	public void live(int x, int y) {
 		GenomeExecutor.executeCurrentGene(this, x,y);
-		if(food == 0){die(x,y);}
+		if(food == 0){
+			die(x,y);
+		}
 		else if(food >= World.MAX_CELL_ORGANIC){
 			divide(x,y);
 		}

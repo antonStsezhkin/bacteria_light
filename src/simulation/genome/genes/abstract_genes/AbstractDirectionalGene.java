@@ -2,10 +2,9 @@ package simulation.genome.genes.abstract_genes;
 
 import simulation.cell.Cell;
 import simulation.cell.LivingCell;
-import simulation.genome.Gene;
 import simulation.world.World;
 
-public abstract class AbstractDirectionalGene implements Gene {
+public abstract class AbstractDirectionalGene extends AbstractGene {
 	private LivingCell cell;
 	protected Cell checkNeighbor(int n , int x, int y){
 		int nX = x; int nY = y;

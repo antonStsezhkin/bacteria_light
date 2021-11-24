@@ -14,9 +14,9 @@ public class GenomeExecutor {
 			//take current gene's index
 			int currentGeneIndex = cell.getCurrentGeneIndex();
 			//find command in map
-			Gene command = GenomeMap.getGene(genome[currentGeneIndex % 64]);
+			Gene command = GenomeMap.getGene(genome[currentGeneIndex]);
 			//execute current command.
-			currentGeneIndex = command.execute(cell,genome,x, y);
+			currentGeneIndex = command.execute(cell,genome,x, y) % 64;
 			//set next gene index to command's execution result
 			cell.setCurrentGeneIndex(currentGeneIndex);
 			stopper++;

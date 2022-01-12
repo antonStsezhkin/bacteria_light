@@ -2,14 +2,16 @@ package simulation.world;
 
 import simulation.SpeciesStorage;
 import simulation.cell.Cell;
-import simulation.cell.DeadCell;
 import simulation.cell.LivingCell;
 import simulation.cell.Wall;
 import simulation.genome.Species;
 
+import java.util.LinkedList;
+import java.util.Queue;
+
 public class World {
-	private static int width = 150, height = 80;
-	private static Cell[][] cellArray = new Cell[height][width];
+	private static int width = 300, height = 160;
+
 	private static int maxLight = 1000;
 	private static final double waterTransparency = 0.995;
 	private static double cellOpacity = 0.2;
@@ -42,7 +44,7 @@ public class World {
 			firstGenome[i] = 32;
 		}
 		firstGenome[5]=5;
-		Species greenCell = new Species(1, firstGenome);
+		Species greenCell = new Species(firstGenome);
 		SpeciesStorage.INSTANCE.put(greenCell);
 		int x = width/2;
 		int y = height/2;
@@ -120,5 +122,9 @@ public class World {
 			cellArray[yTo][xTo] = cellArray[yFrom][xFrom];
 			cellArray[yFrom][xFrom] = null;
 		}
+	}
+
+	public static Queue<Cell> getCellQueue() {
+		return cellQueue;
 	}
 }

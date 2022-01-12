@@ -1,22 +1,47 @@
 package simulation.genome;
 
-import simulation.SpeciesStorage;
-import simulation.cell.Cell;
+import java.util.Arrays;
 
 public class Species {
 	final byte[] genome;
-	final long id;
 	private int population = 0;
-	public Species(long id, byte[] genome) {
-		this.id = id;this.genome = genome;
-	}
 
-	public long getId() {
-		return id;
-	}
+	private String description;
+	private String name;
 
+	public Species(byte[] genome) {
+		this.genome = genome;
+	}
 	public byte[] getGenome() {
 		return genome;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public Species createNewSpecies(int index, byte replacement){
+		byte[] newGenome = genome.clone();
+		newGenome[index] = replacement;
+		return new Species(newGenome);
+	}
+
+	public byte getGeneAt(int index){
+		index %= genome.length;
+		index = index < 0? index+genome.length : index;
+		return genome[index];
 	}
 
 	public int getPopulation(){
@@ -27,8 +52,20 @@ public class Species {
 	}
 	public void decreasePopulation(){
 		population--;
-		if(population == 0){
-			SpeciesStorage.INSTANCE.remove(id);
-		}
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (!(o instanceof Species)) return false;
+
+		Species species = (Species) o;
+
+		return Arrays.equals(genome, species.genome);
+	}
+
+	@Override
+	public int hashCode() {
+		return Arrays.hashCode(genome);
 	}
 }

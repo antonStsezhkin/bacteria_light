@@ -5,16 +5,14 @@ import simulation.genome.GenomeExecutor;
 import simulation.genome.Species;
 import simulation.world.World;
 
-import java.util.Random;
-
 public class LivingCell extends AbstractCell{
 	private long speciesId;
-	private int currentGeneIndex = 0;
+	private int currentGeneIndex = -1;
 	private int direction = 0;
 
 	public LivingCell(Species species, int food){
 		super(food);
-		this.speciesId = species.getId();
+		this.speciesId = SpeciesStorage.INSTANCE.getId(species);
 	}
 	public LivingCell(long speciesId, int food){
 		super(food);
@@ -100,11 +98,6 @@ public class LivingCell extends AbstractCell{
 			return;
 		}
 		die(x,y);
-	}
-
-	private LivingCell createChildCell(){
-		food = food/2;
-		return new LivingCell(speciesId, food);
 	}
 
 }

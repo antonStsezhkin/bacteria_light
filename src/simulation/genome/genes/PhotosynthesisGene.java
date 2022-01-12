@@ -11,7 +11,7 @@ public class PhotosynthesisGene extends AbstractGene {
 	private static final int COST = 5;
 
 	@Override
-	protected int executeGene(LivingCell cell, byte[] genome, int x, int y) {
+	protected int executeGene(LivingCell cell, int x, int y) {
 		int light = World.getLight(x, y);
 		int food = cell.getFood();
 		double consumedLight = LIGHT_CONSUMPTION * food / 100.0 * light;

@@ -3,5 +3,5 @@ package simulation.genome;
 import simulation.cell.LivingCell;
 
 public interface Gene {
-	int execute(LivingCell cell, byte[] genome, int x, int y);
+	int execute(Species genome, LivingCell cell, int x, int y);
 }

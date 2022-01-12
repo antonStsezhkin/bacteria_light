@@ -12,6 +12,4 @@ public interface Cell {
 	void increaseFood(int food);
 	void decreaseFood(int food);
 
-	void die(int x, int y);
-	void live(int x, int y);
 }

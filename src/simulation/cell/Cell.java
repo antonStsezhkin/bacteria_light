@@ -3,7 +3,6 @@ package simulation.cell;
 public interface Cell {
 	//getters
 	int getFood();
-	long getSpeciesId();
 
 	//setters
 	void setFood(int food);

@@ -1,6 +1,7 @@
 package simulation.genome.genes;
 
 import simulation.cell.LivingCell;
+import simulation.genome.Species;
 import simulation.genome.genes.abstract_genes.AbstractGene;
 import simulation.world.World;
 
@@ -11,7 +12,7 @@ public class PhotosynthesisGene extends AbstractGene {
 	private static final int COST = 5;
 
 	@Override
-	protected int executeGene(LivingCell cell, int x, int y) {
+	protected int executeGene(Species genome, LivingCell cell, int x, int y) {
 		int light = World.getLight(x, y);
 		int food = cell.getFood();
 		double consumedLight = LIGHT_CONSUMPTION * food / 100.0 * light;

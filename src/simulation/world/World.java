@@ -11,7 +11,7 @@ import java.util.Queue;
 
 public class World {
 	private static int width = 300, height = 160;
-
+	private static Cell[][] cellArray;
 	private static int maxLight = 1000;
 	private static final double waterTransparency = 0.995;
 	private static double cellOpacity = 0.2;
@@ -31,7 +31,7 @@ public class World {
 	}
 
 	public static Cell[][] getCellArray() {
-		return cellArray;
+		return null;
 	}
 
 	public static int getLight(int x, int y) {
@@ -125,6 +125,6 @@ public class World {
 	}
 
 	public static Queue<Cell> getCellQueue() {
-		return cellQueue;
+		return null;
 	}
 }

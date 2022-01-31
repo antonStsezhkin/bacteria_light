@@ -1,9 +1,7 @@
 package simulation.cell;
 
 import simulation.SpeciesStorage;
-import simulation.genome.GenomeExecutor;
 import simulation.genome.Species;
-import simulation.world.World;
 
 public class LivingCell extends AbstractCell{
 	private long speciesId;
@@ -39,65 +37,7 @@ public class LivingCell extends AbstractCell{
 		this.direction = direction;
 	}
 
-	@Override
 	public long getSpeciesId() {
 		return speciesId;
 	}
-
-	@Override
-	public void die(int x, int y) {
-		Cell corpse = food > 0? new DeadCell(food) : null;
-		SpeciesStorage.INSTANCE.decrease(speciesId);
-		World.setCellAt(x,y,corpse);
-	}
-
-	@Override
-	public void live(int x, int y) {
-		GenomeExecutor.executeCurrentGene(this, x,y);
-		if(food == 0){
-			die(x,y);
-		}
-		else if(food >= World.MAX_CELL_ORGANIC){
-			divide(x,y);
-		}
-	}
-
-	private void divide(int x, int y){
-		currentGeneIndex = 0;
-//TODO optimize free tile search
-		if(World.getCellAt(x,y-1) == null){
-			World.setCellAt(x,y-1, createChildCell());
-			return;
-		}
-		if(World.getCellAt(x+1,y-1) == null){
-			World.setCellAt(x+1,y-1, createChildCell());
-			return;
-		}
-		if(World.getCellAt(x-1,y-1) == null){
-			World.setCellAt(x-1,y-1, createChildCell());
-			return;
-		}
-		if(World.getCellAt(x-1,y) == null){
-			World.setCellAt(x-1,y, createChildCell());
-			return;
-		}
-		if(World.getCellAt(x+1,y) == null){
-			World.setCellAt(x+1,y, createChildCell());
-			return;
-		}
-		if(World.getCellAt(x,y+1) == null){
-			World.setCellAt(x,y+1, createChildCell());
-			return;
-		}
-		if(World.getCellAt(x+1,y+1) == null){
-			World.setCellAt(x+1,y+1, createChildCell());
-			return;
-		}
-		if(World.getCellAt(x-1,y+1) == null){
-			World.setCellAt(x-1,y+1, createChildCell());
-			return;
-		}
-		die(x,y);
-	}
-
 }

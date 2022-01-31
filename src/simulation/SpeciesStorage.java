@@ -33,15 +33,6 @@ public class SpeciesStorage {
 		speciesMap.put(++sequence, species);
 	}
 
-	public long createNewSpecies(long parentId, int index, byte replacement){
-		Species parent = speciesMap.get(parentId);
-		byte[] newGenome = parent.getGenome().clone();
-		newGenome[index] = replacement;
-		Species species = new Species(newGenome);
-		put(species);
-		return sequence;
-	}
-
 	public long getId(Species species) {
 		if(speciesMap.containsValue(species)){
 			return speciesMap.getKey(species);
